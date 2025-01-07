@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChipSecuritySystem
 {
@@ -10,15 +7,40 @@ namespace ChipSecuritySystem
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Chips Required to Unlock Master Panel\n");
-            Console.WriteLine("1. Try your luck with randomly generated chips.");
-            Console.WriteLine("2. Manually enter chips.");
-            Console.WriteLine("3. Use example chips: [Blue, Yellow] [Red, Green] [Yellow, Red] [Orange, Purple].");
+            Console.WriteLine("Choose the way to form the bicolor chip series:");
+            Console.WriteLine("1. Using bicolor chips made.");
+            Console.WriteLine("2. Creating each bicolor chip.");
 
-            int option;
-            while (!int.TryParse(Console.ReadLine(), out option) || (option != 1 && option != 2 && option != 3))
+            int selectedOption;
+            while (!int.TryParse(Console.ReadLine(), out selectedOption) ||
+                (selectedOption != 1 && selectedOption != 2))
             {
-                Console.WriteLine("Invalid input. Please enter 1, 2 or 3.");
+                Console.WriteLine("Incorrect value, please capture the option number, 1 or 2.");
+            }
+            Console.WriteLine();
+
+            List<ColorChip> generatedColorChips = new List<ColorChip>();
+            switch (selectedOption)
+            {
+                case 1:
+                    generatedColorChips = Methods.SelectColorShips();
+                    break;
+                case 2:
+                    generatedColorChips = Methods.CreateColorShips();
+                    break;
+            }
+
+            // FINAL VALIDATION 
+            var firstColorChip = generatedColorChips[0];
+            var lastColorChip = generatedColorChips[generatedColorChips.Count - 1];
+
+            if (firstColorChip.StartColor == Color.Blue && lastColorChip.EndColor == Color.Green)
+            {
+                Console.WriteLine("The master panel has been unlocked, you can now access your home.");
+            }
+            else
+            {
+                Console.WriteLine(Constants.ErrorMessage);
             }
         }
     }
